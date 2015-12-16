@@ -11,13 +11,23 @@ class Api::FansController < ApplicationController
   end
 
   def create
-    fan = Fan.create!(fan_params)
-    render json: fan
+    @fan = Fan.new(fan_params)
+    if @fan.save
+      render :show
+    else
+    render json: @fan.errors.full_messages
+    end
   end
 
   def update
     fan = Fan.update!(fan_params)
     render json: fan
+  end
+
+  def destroy
+    @fan = Fan.find(params[:id])
+    @fan.destroy
+    render :show
   end
 
   private

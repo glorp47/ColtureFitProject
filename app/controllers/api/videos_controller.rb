@@ -11,13 +11,23 @@ class Api::VideosController < ApplicationController
    end
 
    def create
-     video = Video.create!(video_params)
-     render json: video
+     @video = Video.new(video_params)
+     if @video.save
+       render :show
+     else
+     render json: @video.errors.full_messages
+     end
    end
 
    def update
      video = Video.update!(video_params)
      render json: video
+   end
+
+   def destroy
+     @video = Video.find(params[:id])
+     @video.destroy
+     render :show
    end
 
    private

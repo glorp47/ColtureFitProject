@@ -11,13 +11,23 @@ class Api::VenuesController < ApplicationController
     end
 
     def create
-      venue = Venue.create!(venue_params)
-      render json: venue
+      @venue = Venue.new(venue_params)
+      if @venue.save
+        render :show
+      else
+      render json: @venue.errors.full_messages
+      end
     end
 
     def update
       venue = Venue.update!(venue_params)
       render json: venue
+    end
+
+    def destroy
+      @venue = Venue.find(params[:id])
+      @venue.destroy
+      render :show
     end
 
     private

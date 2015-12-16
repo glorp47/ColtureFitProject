@@ -11,13 +11,22 @@ class Api::BandsController < ApplicationController
   end
 
   def create
-    band = Band.create!(band_params)
-    render json: band
+    @band = Band.new(band_params)
+    if @band.save
+      render :show
+    else
+    render json: @band.errors.full_messages
   end
 
   def update
     band = Band.update!(band_params)
     render json: band
+  end
+
+  def destroy
+    @band = Band.find(params[:id])
+    @band.destroy
+    render :show
   end
 
   private

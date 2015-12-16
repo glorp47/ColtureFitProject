@@ -11,13 +11,23 @@ class Api::SongsController < ApplicationController
   end
 
   def create
-    song = Song.create!(song_params)
-    render json: song
+    @song = Song.new(song_params)
+    if @song.save
+      render :show
+    else
+    render json: @song.errors.full_messages
+    end
   end
 
   def update
     song = Song.update!(song_params)
     render json: song
+  end
+
+  def destroy
+    @song = Song.find(params[:id])
+    @song.destroy
+    render :show
   end
 
 

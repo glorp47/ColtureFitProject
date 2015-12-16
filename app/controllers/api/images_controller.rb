@@ -11,13 +11,23 @@ class Api::ImagesController < ApplicationController
   end
 
   def create
-    image = Image.create!(image_params)
-    render json: image
+    @image = Image.new(image_params)
+    if @image.save
+      render :show
+    else
+    render json: @image.errors.full_messages
+    end
   end
 
   def update
     image = Image.update!(image_params)
     render json: image
+  end
+
+  def destroy
+    @image = Image.find(params[:id])
+    @image.destroy
+    render :show
   end
 
 
