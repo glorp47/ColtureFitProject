@@ -15,7 +15,8 @@ class Api::BandsController < ApplicationController
     if @band.save
       render :show
     else
-    render json: @band.errors.full_messages
+      render json: @band.errors.full_messages
+    end
   end
 
   def update
