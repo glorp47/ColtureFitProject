@@ -3,7 +3,7 @@ class Gig < ActiveRecord::Base
   validates :venue_id, :title, :date, :description, presence: true
 
   has_many :bookings,
-  dependent: destroy
+  dependent: :destroy
 
   has_many :bands,
   through: :bookings

@@ -1,9 +1,9 @@
 class Band < ActiveRecord::Base
 
   has_many :albums,
-  dependent: destroy
+  dependent: :destroy
 
   has_many :songs,
-  dependent: destroy
+  dependent: :destroy
 
 end

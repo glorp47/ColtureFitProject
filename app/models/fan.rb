@@ -8,15 +8,15 @@ class Fan < ActiveRecord::Base
   attr_reader :password
 
   has_one :band,
-  dependent: destroy
+  dependent: :destroy
   has_one :venue,
-  dependent: destroy
+  dependent: :destroy
   has_many :press_items,
-  dependent: destroy
+  dependent: :destroy
   has_many :images,
-  dependent: destroy
+  dependent: :destroy
   has_many :videos,
-  dependent: destroy
+  dependent: :destroy
 
   after_initialize :ensure_token
 

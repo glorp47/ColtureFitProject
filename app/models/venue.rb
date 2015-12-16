@@ -4,7 +4,7 @@ class Venue < ActiveRecord::Base
 
   belongs_to :fan
   has_many :gigs,
-  dependent: destroy
+  dependent: :destroy
 
   has_many :bookings,
   through: :gigs
