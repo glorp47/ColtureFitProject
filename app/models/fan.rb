@@ -22,8 +22,7 @@ class Fan < ActiveRecord::Base
 
   def self.find_by_credentials(email, password)
     fan = Fan.find_by(email: email)
-    return nil unless fan && fan.valid_password?(password)
-    user
+    fan.try(:valid_password?, password) ? fan: nil
   end
 
   def password=(password)

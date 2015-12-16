@@ -6,10 +6,9 @@ class FansController < ApplicationController
 
   def create
     @fan = Fan.new(fan_params)
-    fail
     if @fan.save
       sign_in!(@fan)
-      redirect_to root
+      redirect_to root_path
     else
       flash.now[:errors] = @fan.errors.full_messages
       render :new

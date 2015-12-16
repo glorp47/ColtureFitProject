@@ -5,13 +5,13 @@ class SessionsController < ApplicationController
 
   def create
      fan = Fan.find_by_credentials(
-       params[:fan][:username],
+       params[:fan][:email],
        params[:fan][:password]
      )
 
      if fan
        sign_in!(fan)
-       redirect_to root
+       redirect_to root_path
      else
        flash.now[:errors] = ["Invalid username or password"]
        render :new

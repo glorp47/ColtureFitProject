@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
     !!current_fan
   end
 
-  def sign_in(user)
+  def sign_in!(fan)
       @current_fan = fan
       session[:session_token] = fan.reset_token!
     end

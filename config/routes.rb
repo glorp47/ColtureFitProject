@@ -15,6 +15,6 @@ namespace :api, defaults: {format: :json} do
   resources :press_items, only: [:create, :index, :show, :update, :destroy]
   end
 
-  root "static_pages#root"
+  root :to => "static_pages#root"
 
 end
