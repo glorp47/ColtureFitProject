@@ -9,11 +9,11 @@
 <body>
 
     <% if signed_in? %>
-    <p>Logged in as: <%= current_fan.email %></p>
+    <p>Logged in as: <%= current_band.email %></p>
     <%= button_to "Sign Out", session_url, method: :delete %>
     <% else %>
     <%= link_to "Sign In", new_session_url %>
-    <%= link_to "Sign Up", new_fan_url %>
+    <%= link_to "Sign Up", new_band_url %>
   <% end %>
 
   <% if flash[:errors] %>

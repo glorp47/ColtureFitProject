@@ -1,0 +1,50 @@
+<h1>New Band</h1>
+
+<form action="<%= bands_url %>" method="post">
+    <input
+      type="hidden"
+      name="authenticity_token"
+      value="<%= form_authenticity_token %>">
+
+    <label>Email
+      <input type="text" name="band[email]">
+    </label>
+    <br>
+
+    <label>Password
+      <input type="password" name="band[password]">
+    </label>
+    <br>
+
+    <label>Username
+      <input type="text" name="band[username]">
+    </label>
+    <br>
+
+    <label>Location(ZIP)
+      <input type="text" name="band[location_zip]">
+    </label>
+    <br>
+
+    <label>Select Account Type
+      <select name="band[genre]">
+      <option value="rap">Rap/Hip-Hop</option>
+      <option value="electronic">Electronic Music</option>
+      <option value="punk">Punk Rock</option>
+      <option value="indie">Indie Rock</option>
+      <option value="hardrock">Hard Rock</option>
+      <option value="jazz">Jazz Rock</option>
+      <option value="funk">Funk Music</option>
+      <option value="randb">Rhythm and Blues</option>
+      <option value="metal">Metal</option>
+      <option value="country">Country</option>
+      <option value="singersongwriter">Singer-Songwriter</option>
+      <option value="reggae">Reggae</option>
+      <option value="symphonic">Symphonic</option>
+      <option value="traditionalworld">Traditional World Music</option>
+    </select>
+    </label>
+<br>
+
+    <input type="submit">
+</form>

@@ -34,7 +34,8 @@ class Api::GigsController < ApplicationController
     private
 
     def gig_params
-      params.require(:gig).permit(:title, :date, :description)
+      params.require(:gig).permit(:title, :date, :description,
+      :geo_lat, :geo_lng, :address, :location_zip)
     end
 
 end

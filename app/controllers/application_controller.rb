@@ -3,24 +3,24 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  helper_method :current_fan, :signed_in?
+  helper_method :current_band, :signed_in?
 
 
-  def current_fan
-    @current_fan ||= Fan.find_by_session_token(session[:session_token])
+  def current_band
+    @current_band ||= Band.find_by_session_token(session[:session_token])
   end
 
   def signed_in?
-    !!current_fan
+    !!current_band
   end
 
-  def sign_in!(fan)
-      @current_fan = fan
-      session[:session_token] = fan.reset_token!
+  def sign_in!(band)
+      @current_band = band
+      session[:session_token] = band.reset_token!
     end
 
     def sign_out
-      current_fan.try(:reset_token!)
+      current_band.try(:reset_token!)
       session[:session_token] = nil
     end
 

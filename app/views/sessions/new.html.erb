@@ -1,6 +1,6 @@
 <h1>Sign In</h1>
 
-<%= link_to "Sign up!", new_fan_url %>
+<%= link_to "Sign up!", new_band_url %>
 <form action="<%= session_url %>" method="post">
     <input
       type="hidden"
@@ -8,13 +8,13 @@
       value="<%= form_authenticity_token %>">
 
     <label>Email
-      <input type="text" name="fan[email]">
+      <input type="text" name="band[email]">
     </label>
     <br>
     <br>
 
     <label>Password
-      <input type="password" name="fan[password]">
+      <input type="password" name="band[password]">
     </label>
     <br>
 

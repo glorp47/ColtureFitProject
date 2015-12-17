@@ -1,7 +1,7 @@
 class CreatePressItems < ActiveRecord::Migration
   def change
     create_table :press_items do |t|
-      t.integer :fan_id, null: false
+      t.integer :band_id, null: false
       t.string :title, null: false
       t.string :publisher, null: false
       t.text :body, null: false
@@ -9,6 +9,6 @@ class CreatePressItems < ActiveRecord::Migration
       t.string :link_src
       t.timestamps null: false
     end
-    add_index :press_items, :fan_id
+    add_index :press_items, :band_id
   end
 end
