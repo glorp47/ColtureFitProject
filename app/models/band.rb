@@ -1,7 +1,10 @@
 class Band < ActiveRecord::Base
 
-
-  belongs_to :fan
+  validates :username, :password_digest, :session_token, :location_zip, presence: true
+  validates :password, length: { minimum: 6, allow_nil: true }
+  validates :genre, presence: true, inclusion: {in: %w(rap electronic punk indie hardrock
+    jazz funk randb metal country singersongwriter reggae symphonic traditionalworld)}
+  validates :email, uniqueness: true, presence: true
 
   has_many :albums,
   dependent: :destroy
@@ -12,25 +15,17 @@ class Band < ActiveRecord::Base
   has_many :bookings,
   dependent: :destroy
 
-
-  validates :username, :password_digest, :session_token, :location_zip, presence: true
-  validates :password, length: { minimum: 6, allow_nil: true }
-  validates :genre, presence: true, inclusion: {in: %w(rap electronic punk indie hardrock
-    jazz funk randb metal country singersongwriter reggae symphonic traditionalworld)}
-  validates :email, uniqueness: true, presence: true
-
-  attr_reader :password
-
-  has_one :band,
-  dependent: :destroy
-  has_one :venue,
-  dependent: :destroy
   has_many :press_items,
   dependent: :destroy
+
   has_many :images,
   dependent: :destroy
+
   has_many :videos,
   dependent: :destroy
+
+
+  attr_reader :password
 
   after_initialize :ensure_token
 
