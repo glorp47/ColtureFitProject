@@ -9,7 +9,7 @@ contextTypes: {
 },
 getInitialState: function() {
   return {
-    name: "",
+    username: "",
     short_bio: "",
     location_zip: "00000",
     genre: "",

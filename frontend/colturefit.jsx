@@ -17,12 +17,13 @@ var App = React.createClass({
     );
   }
 });
+
 var routes = (
   <Route path="/" component={App}>
     <IndexRoute component={Search}/>
-    <Route path="bands/new" component={BandForm}/>
-    <Route path="bands/:benchId" component={BandShow}>
-    </Route>
+    <Route path="/band/new" component={BandForm}/>
+    <Route path="/band/:bandId" component={BandShow}/>
   </Route>
 );
+
 ReactDOM.render(<Router>{routes}</Router>, document.getElementById('content'));

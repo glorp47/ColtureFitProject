@@ -2,24 +2,24 @@ var React = require('react');
 var FilterActions = require('../actions/filterActions');
 
 var Filters = React.createClass({
-  locationChanged: function(e) {
+  nameChanged: function(e) {
     FilterActions.updateLocation(e.target.value);
   },
-  currentZipCode: function () {
-    return this.props.filterParams.location_zip;
+  currentName: function () {
+    return this.props.filterParams.username;
   },
-  updateParams: function(location_zip) {
+  updateParams: function(username) {
     FilterActions.updateParams({
-      params: {location: location_zip}
+      params: {location: username}
     });
   },
   render: function() {
     return (
       <div>
-        <label>Zip Code</label>
-        <input type="number"
+        <label>Name</label>
+        <input type="name"
           onChange={this.locationChanged}
-          value={this.currentZipCode()}/>
+          value={this.username()}/>
       </div>
     );
   }

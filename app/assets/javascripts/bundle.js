@@ -73,13 +73,15 @@
 	    );
 	  }
 	});
+	
 	var routes = React.createElement(
 	  Route,
 	  { path: '/', component: App },
 	  React.createElement(IndexRoute, { component: Search }),
-	  React.createElement(Route, { path: 'bands/new', component: BandForm }),
-	  React.createElement(Route, { path: 'bands/:benchId', component: BandShow })
+	  React.createElement(Route, { path: '/band/new', component: BandForm }),
+	  React.createElement(Route, { path: '/band/:bandId', component: BandShow })
 	);
+	
 	ReactDOM.render(React.createElement(
 	  Router,
 	  null,
@@ -24456,7 +24458,7 @@
 	  },
 	  getInitialState: function () {
 	    return {
-	      name: "",
+	      username: "",
 	      short_bio: "",
 	      location_zip: "00000",
 	      genre: "",
@@ -24664,17 +24666,47 @@
 	    this.bandListener.remove();
 	  },
 	  _bandChanged: function () {
-	    var bandId = this.props.param.bandId;
+	    var bandId = this.props.params.bandId;
 	    var band = this._findBandbyId(bandId);
 	    this.setState({ band: band });
 	  },
 	  render: function () {
 	    var bands = [];
+	    var albums = [];
 	    if (this.state.band) {
 	      bands.push(this.state.band);
 	    }
 	    var Link = ReactRouter.Link;
-	
+	    this.state.band.albums.forEach(function (album) {
+	      albums.push(React.createElement(
+	        'ul',
+	        null,
+	        React.createElement(
+	          'li',
+	          null,
+	          'Album Name: ',
+	          album.title
+	        ),
+	        React.createElement(
+	          'li',
+	          null,
+	          'Album Date: ',
+	          album.date_made.slice(0, 10)
+	        ),
+	        React.createElement(
+	          'li',
+	          null,
+	          'Album Embed link: ',
+	          album.link_src
+	        ),
+	        React.createElement(
+	          'li',
+	          null,
+	          'Album Picture: ',
+	          album.img_src
+	        )
+	      ));
+	    });
 	    return React.createElement(
 	      'div',
 	      null,
@@ -24682,6 +24714,57 @@
 	        Link,
 	        { to: '/' },
 	        'Back to Bands Index'
+	      ),
+	      React.createElement(
+	        'ul',
+	        null,
+	        React.createElement(
+	          'li',
+	          null,
+	          'Name: ',
+	          this.state.band.username
+	        ),
+	        React.createElement(
+	          'li',
+	          null,
+	          'Short Bio: ',
+	          this.state.band.short_bio
+	        ),
+	        React.createElement(
+	          'li',
+	          null,
+	          'Location: ',
+	          this.state.band.location_zip
+	        ),
+	        React.createElement(
+	          'li',
+	          null,
+	          'Genre: ',
+	          this.state.band.genre
+	        ),
+	        React.createElement(
+	          'li',
+	          null,
+	          'Members: ',
+	          this.state.band.members
+	        ),
+	        React.createElement(
+	          'li',
+	          null,
+	          'Long Bio: ',
+	          this.state.band.long_bio
+	        ),
+	        React.createElement(
+	          'li',
+	          null,
+	          'Discography: ',
+	          this.state.band.discography
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        null,
+	        albums
 	      )
 	    );
 	  }
@@ -31824,7 +31907,11 @@
 	    this.filterListener.remove();
 	  },
 	  render: function () {
-	    return React.createElement('div', null);
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(Index, { bands: this.state.bands, history: this.props.history })
+	    );
 	  }
 	
 	});
@@ -31841,15 +31928,15 @@
 	var Filters = React.createClass({
 	  displayName: 'Filters',
 	
-	  locationChanged: function (e) {
+	  nameChanged: function (e) {
 	    FilterActions.updateLocation(e.target.value);
 	  },
-	  currentZipCode: function () {
-	    return this.props.filterParams.location_zip;
+	  currentName: function () {
+	    return this.props.filterParams.username;
 	  },
-	  updateParams: function (location_zip) {
+	  updateParams: function (username) {
 	    FilterActions.updateParams({
-	      params: { location: location_zip }
+	      params: { location: username }
 	    });
 	  },
 	  render: function () {
@@ -31859,11 +31946,11 @@
 	      React.createElement(
 	        'label',
 	        null,
-	        'Zip Code'
+	        'Name'
 	      ),
-	      React.createElement('input', { type: 'number',
+	      React.createElement('input', { type: 'name',
 	        onChange: this.locationChanged,
-	        value: this.currentZipCode() })
+	        value: this.username() })
 	    );
 	  }
 	});
@@ -31876,7 +31963,7 @@
 
 	var AppDispatcher = __webpack_require__(231);
 	var Store = __webpack_require__(213).Store;
-	var _params = { location: 11111 };
+	var _params = { location: "" };
 	var FilterConstants = __webpack_require__(245);
 	
 	var FilterParamsStore = new Store(AppDispatcher);
@@ -31887,8 +31974,8 @@
 	
 	FilterParamsStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
-	    case FilterConstants.UPDATE_LOCATION:
-	      _params.location_zip = payload.location_zip;
+	    case FilterConstants.UPDATE_NAME:
+	      _params.name = payload.name;
 	      FilterParamsStore.__emitChange();
 	      break;
 	  }
@@ -31901,7 +31988,7 @@
 /***/ function(module, exports) {
 
 	var FilterConstants = {
-	  UPDATE_LOCATION: "UPDATE_LOCATION"
+	  UPDATE_USERNAME: "UPDATE_USERNAME"
 	};
 	
 	module.exports = FilterConstants;
@@ -31916,8 +32003,8 @@
 	var FilterActions = {
 	  updateLocation: function (location_zip) {
 	    AppDispatcher.dispatch({
-	      actionType: FilterConstants.UPDATE_LOCATION,
-	      location_zip: location_zip
+	      actionType: FilterConstants.UPDATE_NAME,
+	      name: name
 	    });
 	  }
 	};
@@ -31948,13 +32035,17 @@
 	        null,
 	        'Index'
 	      ),
-	      this.props.bands.map(function (band) {
-	        var boundClick = handleItemClick.bind(null, band);
-	        return React.createElement(IndexItem, {
-	          onClick: boundClick,
-	          band: band,
-	          key: band.id });
-	      })
+	      React.createElement(
+	        'ul',
+	        null,
+	        this.props.bands.map(function (band) {
+	          var boundClick = handleItemClick.bind(null, band);
+	          return React.createElement(IndexItem, {
+	            clicked: boundClick,
+	            band: band,
+	            key: band.id });
+	        })
+	      )
 	    );
 	  }
 	});
@@ -31971,14 +32062,16 @@
 	var IndexItem = React.createClass({
 	  displayName: 'IndexItem',
 	
-	  mixins: [ReactRouter.history],
+	  mixins: [ReactRouter.History],
 	  render: function () {
 	    var band = this.props.band;
 	    return React.createElement(
-	      'div',
-	      { className: 'band-index-item', onClick: this.props.onClick },
-	      band.short_bio,
-	      React.createElement('br', null)
+	      'li',
+	      { key: band.id, className: 'band-index-item',
+	        onClick: this.props.clicked, band: this.props.band },
+	      band.username,
+	      ' - ',
+	      band.genre
 	    );
 	  }
 	});

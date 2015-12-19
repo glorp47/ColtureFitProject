@@ -41,7 +41,11 @@ var Search = React.createClass({
     this.filterListener.remove();
   },
   render: function(){
-    return (<div></div>);
+    return (
+      <div>
+        <Index bands={this.state.bands} history={this.props.history}/>
+      </div>
+    );
   }
 
 });

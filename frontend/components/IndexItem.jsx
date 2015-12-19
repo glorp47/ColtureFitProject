@@ -2,14 +2,14 @@ var React = require('react');
 var ReactRouter = require('react-router');
 
 var IndexItem = React.createClass({
-  mixins: [ReactRouter.history],
+  mixins: [ReactRouter.History],
   render: function() {
     var band = this.props.band;
     return (
-      <div className="band-index-item" onClick={this.props.onClick}>
-        {band.short_bio}
-        <br/>
-        </div>
+      <li key={band.id} className="band-index-item"
+        onClick={this.props.clicked} band={this.props.band}>
+        {band.username} - {band.genre}
+      </li>
     );
   }
 });

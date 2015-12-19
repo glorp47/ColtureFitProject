@@ -1,6 +1,6 @@
 var AppDispatcher = require('../dispatcher/dispatcher');
 var Store = require('flux/utils').Store;
-var _params = {location: 11111};
+var _params = {location: ""};
 var FilterConstants = require('../constants/filterConstants');
 
 var FilterParamsStore = new Store(AppDispatcher);
@@ -11,8 +11,8 @@ FilterParamsStore.params = function () {
 
 FilterParamsStore.__onDispatch = function (payload) {
   switch(payload.actionType) {
-    case FilterConstants.UPDATE_LOCATION:
-    _params.location_zip = payload.location_zip;
+    case FilterConstants.UPDATE_NAME:
+    _params.name = payload.name;
     FilterParamsStore.__emitChange();
     break;
   }

@@ -1,5 +1,5 @@
 var FilterConstants = {
-  UPDATE_LOCATION: "UPDATE_LOCATION"
+  UPDATE_USERNAME: "UPDATE_USERNAME"
 };
 
 module.exports = FilterConstants;

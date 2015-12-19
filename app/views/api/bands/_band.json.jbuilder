@@ -1,6 +1,6 @@
 json.extract!(
 band,
-:username, :short_bio, :location_zip, :discography, :genre, :members, :long_bio
+:username, :short_bio, :location_zip, :discography, :genre, :members, :long_bio, :id
 )
 
 json.images band.images do |image|

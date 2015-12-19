@@ -10,15 +10,19 @@ var Index = React.createClass({
     return (
       <div>
         <h1>Index</h1>
-        {
-          this.props.bands.map(function(band){
-            var boundClick = handleItemClick.bind(null, band);
-            return <IndexItem
-              onClick={boundClick}
-              band={band}
-              key={band.id} />;
-          })
-        }
+        <ul>
+          {
+            this.props.bands.map(function(band){
+              var boundClick = handleItemClick.bind(null, band);
+              return (
+                <IndexItem
+                clicked={boundClick}
+                band={band}
+                key={band.id} />
+              );
+            })
+          }
+        </ul>
       </div>
     );
   }
