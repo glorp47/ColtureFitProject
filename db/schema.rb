@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151216172248) do
+ActiveRecord::Schema.define(version: 20151221192007) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,10 +40,12 @@ ActiveRecord::Schema.define(version: 20151216172248) do
     t.text     "long_bio"
     t.integer  "location_zip",    null: false
     t.string   "genre",           null: false
-    t.text     "discography"
     t.text     "members"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.string   "twitter"
+    t.string   "facebook"
+    t.string   "instagram"
   end
 
   add_index "bands", ["email"], name: "index_bands_on_email", unique: true, using: :btree

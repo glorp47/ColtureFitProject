@@ -21,7 +21,7 @@ getInitialState: function() {
 handleSubmit: function(event) {
   event.preventDefault();
   var band = Object.assign({}, this.state);
-  ApiUtil.reateBand(band);
+  ApiUtil.createBand(band);
   this.navigateToSearch();
 },
 navigateToSearch: function() {
@@ -35,19 +35,19 @@ render: function() {
   return (<div>
     <h3>Create Band</h3>
     <form onSubmit={this.handleSubmit}>
-      <label>Email</label>
+      <label>Email </label>
         <input type="text" valueLink={this.linkState('email')}/>
           <br/>
-      <label>Name</label>
+      <label>Name </label>
       <input type="text" valueLink={this.linkState('username')}/>
         <br/>
-      <label>Short Bio</label>
+      <label>Short Bio </label>
         <input type="textarea" valueLink={this.linkState('short_bio')}/>
           <br/>
-      <label>Long Bio</label>
+      <label>Long Bio </label>
         <input type="textarea" valueLink={this.linkState('long_bio')}/>
           <br/>
-      <label>Location (Zip Code)</label>
+      <label>Location (Zip Code) </label>
         <input type="number" valueLink={this.linkState('location_zip')}/>
         <br/>
       <label>Genre
@@ -68,18 +68,13 @@ render: function() {
         <option value="traditionalworld">Traditional World Music</option>
       </select>
     </label><br/>
-      <label>Members</label>
-      <input type="textarea" valueLink={this.linkState('members')}/>
-      <input type="textarea" valueLink={this.linkState('discography')}/>
+      <label>Members </label>
+      <input type="textarea" valueLink={this.linkState('members')}/> <br/>
       <input type="submit" value="create band"/>
     </form>
     <button onClick={this.handleCancel}>Cancel</button>
   </div>);
 }
-
-
-
-
 
 
 });

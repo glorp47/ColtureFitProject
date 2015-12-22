@@ -4,6 +4,8 @@ var FilterParamsStore = require('../stores/filter_params');
 var ApiUtil = require('../util/ApiUtil');
 var Filters = require('./Filters');
 var Index = require('./Index.jsx');
+var BandForm = require('./BandForm');
+var ReactRouter = require('react-router');
 
 function _getAllBands() {
   return BandStore.all();
@@ -41,8 +43,10 @@ var Search = React.createClass({
     this.filterListener.remove();
   },
   render: function(){
+    var Link = ReactRouter.Link;
     return (
       <div>
+        <Link to="/band/new">Create New Band</Link>
         <Index bands={this.state.bands} history={this.props.history}/>
       </div>
     );
