@@ -15,6 +15,9 @@ class Band < ActiveRecord::Base
   has_many :bookings,
   dependent: :destroy
 
+  has_many :gigs,
+  through: :bookings
+
   has_many :press_items,
   dependent: :destroy
 

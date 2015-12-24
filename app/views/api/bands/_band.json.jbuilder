@@ -11,8 +11,8 @@ json.albums band.albums do |album|
   json.partial! 'api/albums/album', album: album
 end
 
-json.bookings band.bookings do |booking|
-  json.partial! partial: 'gigs/gig', gig: booking.gig
+json.gigs band.gigs do |gig|
+  json.partial! partial: 'api/gigs/gig', gig: gig
 end
 
 json.songs band.songs do |song|

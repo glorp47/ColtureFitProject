@@ -9,7 +9,7 @@ contextTypes: {
 },
 getInitialState: function() {
   return {
-    band_id: 0,
+    band_id: this.props.location.query.bandId,
     title: "",
     long_bio: "",
     date_made: "31 Dec 2015",
@@ -34,7 +34,6 @@ render: function() {
   return (<div>
     <h3>Create Album</h3>
     <form onSubmit={this.handleSubmit}>
-      <input type="hidden" name="band_id" value={this.props.params.bandId}/>
       <label>Title</label>
       <input type="text" valueLink={this.linkState('title')}/>
         <br/>

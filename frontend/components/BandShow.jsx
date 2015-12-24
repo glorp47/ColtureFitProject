@@ -4,6 +4,7 @@ var ReactRouter = require('react-router');
 var ApiUtil = require('../util/ApiUtil');
 var AlbumForm = require('./AlbumForm');
 var Video = require('./Video');
+var Timeline = require('react-embedded-twitter-timeline');
 
 
 var BandShow = React.createClass({
@@ -48,23 +49,34 @@ var BandShow = React.createClass({
     var bands = [];
     var albums = [];
     var videos = [];
-    if (this.state.band) {
+    if (this.state.band.id) {
       bands.push(this.state.band);
+    } else {
+      return <div>loading...</div>;
     }
     var Link = ReactRouter.Link;
-    var opts = {
-      height: '390',
-      width: '640',
-      playerVars: { // https://developers.google.com/youtube/player_parameters
-        autoplay: 1
-      }
-    };
+    var fbLink = "https://www.facebook.com/" + this.state.band.facebook;
+    var twitterLink = "https://twitter.com/" + this.state.band.twitter;
+
+    var twitterEmbed = (<a className="twitter-timeline" href={twitterLink}
+      data-widget-id="679881850605572098">Tweets by @{this.state.band.twitter}</a>);
+      
+    var fbEmbed = (<div className="fb-page" data-href={fbLink}
+      data-tabs="timeline" data-small-header="false" data-adapt-container-width="true"
+      data-hide-cover="false" data-show-facepile="true">
+      <div className="fb-xfbml-parse-ignore">
+        <blockquote cite={fbLink}>
+          <a href={fbLink}>this.state.band.username</a>
+          </blockquote></div></div>);
+
+
     this.state.band.videos.forEach(function(video) {
+
       videos.push(
-        <ul>
+        <ul key={"video" + video.id}>
+          <li><div dangerouslySetInnerHTML={{__html: video.link_src}} /></li>
           <li>Video Title: {video.title}</li>
           <li>Video Date: {video.date_made.slice(0,10)}</li>
-          <li>Video Link: {video.link_src}</li>
         </ul>
 
       );
@@ -72,19 +84,18 @@ var BandShow = React.createClass({
 
     this.state.band.albums.forEach(function(album) {
       albums.push(
-        <ul>
-          <li>Release Picture: {album.img_src}</li>
+        <ul key={"album" + album.id}>
+          <li><div dangerouslySetInnerHTML={{__html: album.link_src}} /></li>
           <li>Release Title: {album.title}</li>
           <li>Release Date: {album.date_made.slice(0,10)}</li>
-          <li>Release Embed link: {album.link_src}</li>
         </ul>
       );
     });
-    var twitterHrefLink = "https://twitter.com/" + this.state.band.twitter;
+    console.log(fbEmbed);
     return (
       <div>
-        <Link to="/"  >Back to Bands Index</Link> <br/>
-        <Link to="/band/:bandId/album/new"  >
+        <Link to="/" >Back to Bands Index</Link> <br/>
+        <Link to={"/album/new?bandId=" + this.state.band.id}>
           Create new Album for {this.state.band.username}</Link>
         <ul>
           <li>Name: {this.state.band.username}</li>
@@ -98,6 +109,9 @@ var BandShow = React.createClass({
             <div  className="album-list">{albums}</div>
             <div  className="video-list">{videos}</div>
           </div>
+          {fbEmbed}
+          {twitterEmbed}
+
         </div>
     );
   }

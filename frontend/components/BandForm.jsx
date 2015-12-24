@@ -21,6 +21,7 @@ getInitialState: function() {
 handleSubmit: function(event) {
   event.preventDefault();
   var band = Object.assign({}, this.state);
+  console.log(band);
   ApiUtil.createBand(band);
   this.navigateToSearch();
 },

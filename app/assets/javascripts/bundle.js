@@ -82,7 +82,7 @@
 	  React.createElement(IndexRoute, { component: Search }),
 	  React.createElement(Route, { path: '/band/new', component: BandForm }),
 	  React.createElement(Route, { path: '/band/:bandId', component: BandShow }),
-	  React.createElement(Route, { path: '/band/:bandId/album/new', component: AlbumForm })
+	  React.createElement(Route, { path: '/album/new', component: AlbumForm })
 	);
 	
 	ReactDOM.render(React.createElement(
@@ -31620,13 +31620,11 @@
 	  mixins: [ReactRouter.History],
 	  render: function () {
 	    var band = this.props.band;
-	    console.log(band.images);
 	    return React.createElement(
 	      'li',
-	      { key: band.id, className: 'band-index-item',
+	      { className: 'band-index-item',
 	        onClick: this.props.clicked, band: this.props.band },
-	      React.createElement('img', { src: band.images[0].link_src }),
-	      ' ',
+	      band.images && React.createElement('img', { src: band.images[0].link_src }),
 	      React.createElement('br', null),
 	      band.username,
 	      ' - ',
@@ -31666,6 +31664,7 @@
 	  handleSubmit: function (event) {
 	    event.preventDefault();
 	    var band = Object.assign({}, this.state);
+	    console.log(band);
 	    ApiUtil.createBand(band);
 	    this.navigateToSearch();
 	  },
@@ -32065,6 +32064,7 @@
 	var ApiUtil = __webpack_require__(235);
 	var AlbumForm = __webpack_require__(301);
 	var Video = __webpack_require__(253);
+	var Timeline = __webpack_require__(302);
 	
 	var BandShow = React.createClass({
 	  displayName: 'BandShow',
@@ -32109,21 +32109,57 @@
 	    var bands = [];
 	    var albums = [];
 	    var videos = [];
-	    if (this.state.band) {
+	    if (this.state.band.id) {
 	      bands.push(this.state.band);
+	    } else {
+	      return React.createElement(
+	        'div',
+	        null,
+	        'loading...'
+	      );
 	    }
 	    var Link = ReactRouter.Link;
-	    var opts = {
-	      height: '390',
-	      width: '640',
-	      playerVars: { // https://developers.google.com/youtube/player_parameters
-	        autoplay: 1
-	      }
-	    };
+	    var fbLink = "https://www.facebook.com/" + this.state.band.facebook;
+	    var twitterLink = "https://twitter.com/" + this.state.band.twitter;
+	
+	    var twitterEmbed = React.createElement(
+	      'a',
+	      { className: 'twitter-timeline', href: twitterLink,
+	        'data-widget-id': '679881850605572098' },
+	      'Tweets by @',
+	      this.state.band.twitter
+	    );
+	
+	    var fbEmbed = React.createElement(
+	      'div',
+	      { className: 'fb-page', 'data-href': fbLink,
+	        'data-tabs': 'timeline', 'data-small-header': 'false', 'data-adapt-container-width': 'true',
+	        'data-hide-cover': 'false', 'data-show-facepile': 'true' },
+	      React.createElement(
+	        'div',
+	        { className: 'fb-xfbml-parse-ignore' },
+	        React.createElement(
+	          'blockquote',
+	          { cite: fbLink },
+	          React.createElement(
+	            'a',
+	            { href: fbLink },
+	            'this.state.band.username'
+	          )
+	        )
+	      )
+	    );
+	
 	    this.state.band.videos.forEach(function (video) {
+	
 	      videos.push(React.createElement(
 	        'ul',
-	        null,
+	        { key: "video" + video.id },
+	        React.createElement(
+	          'li',
+	          null,
+	          React.createElement('div', { dangerouslySetInnerHTML: { __html: video.link_src } })
+	        ),
 	        React.createElement(
 	          'li',
 	          null,
@@ -32135,12 +32171,6 @@
 	          null,
 	          'Video Date: ',
 	          video.date_made.slice(0, 10)
-	        ),
-	        React.createElement(
-	          'li',
-	          null,
-	          'Video Link: ',
-	          video.link_src
 	        )
 	      ));
 	    });
@@ -32148,12 +32178,11 @@
 	    this.state.band.albums.forEach(function (album) {
 	      albums.push(React.createElement(
 	        'ul',
-	        null,
+	        { key: "album" + album.id },
 	        React.createElement(
 	          'li',
 	          null,
-	          'Release Picture: ',
-	          album.img_src
+	          React.createElement('div', { dangerouslySetInnerHTML: { __html: album.link_src } })
 	        ),
 	        React.createElement(
 	          'li',
@@ -32166,16 +32195,10 @@
 	          null,
 	          'Release Date: ',
 	          album.date_made.slice(0, 10)
-	        ),
-	        React.createElement(
-	          'li',
-	          null,
-	          'Release Embed link: ',
-	          album.link_src
 	        )
 	      ));
 	    });
-	    var twitterHrefLink = "https://twitter.com/" + this.state.band.twitter;
+	    console.log(fbEmbed);
 	    return React.createElement(
 	      'div',
 	      null,
@@ -32188,7 +32211,7 @@
 	      React.createElement('br', null),
 	      React.createElement(
 	        Link,
-	        { to: '/band/:bandId/album/new' },
+	        { to: "/album/new?bandId=" + this.state.band.id },
 	        'Create new Album for ',
 	        this.state.band.username
 	      ),
@@ -32245,7 +32268,9 @@
 	          { className: 'video-list' },
 	          videos
 	        )
-	      )
+	      ),
+	      fbEmbed,
+	      twitterEmbed
 	    );
 	  }
 	});
@@ -39341,7 +39366,7 @@
 	  },
 	  getInitialState: function () {
 	    return {
-	      band_id: 0,
+	      band_id: this.props.location.query.bandId,
 	      title: "",
 	      long_bio: "",
 	      date_made: "31 Dec 2015",
@@ -39374,7 +39399,6 @@
 	      React.createElement(
 	        'form',
 	        { onSubmit: this.handleSubmit },
-	        React.createElement('input', { type: 'hidden', name: 'band_id', value: this.props.params.bandId }),
 	        React.createElement(
 	          'label',
 	          null,
@@ -39424,6 +39448,78 @@
 	});
 	
 	module.exports = AlbumForm;
+
+/***/ },
+/* 302 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var timelineDidMount = function(d,s,id) {
+	    var js
+	    , fjs = d.getElementsByTagName(s)[0]
+	    , head = d.getElementsByTagName("head")[0]
+	    , p = /^http:/.test(d.location)?'http':'https';
+	    
+	    js = d.createElement(s);
+	    js.id = id;
+	    js.src = p+"://platform.twitter.com/widgets.js";
+	    if (fjs) {
+		fjs.parentNode.insertBefore(js,fjs);
+	    } else {
+		// Handle the case where we're running in a test environemnt
+		// and there isn't a script tag in the head element.
+		head.appendChild(js);
+	    }
+	};
+	
+	var Timeline = React.createClass({displayName: "Timeline",
+	    componentDidMount: function() {
+	        timelineDidMount(document,"script","twitter-wjs");
+	
+		// If we don't care about doing anything to the timeline after
+		// it mounts, just return now
+		if (!this.props.timelineDidMount)
+		    return;
+		timelineDidMount();
+	
+		// Else we have to loop until the timeline loads
+	        var detectLoaded = function() {
+		    var twitterIframeEl = document.querySelector('iframe.twitter-timeline-rendered')
+		    , twitterIsFinishedLoading = twitterIframeEl && twitterIframeEl.style.height == '600px' && twitterIframeEl.style.position == 'static';
+	
+		    // In order for style changes to apply we have to wait
+		    // until the iframe has loaded to manipulate the js. Run
+		    // twitterIsFishedLoading every 100 milliseconds until
+		    // iframe is loaded and original styles are set, then run
+		    // the code to change the styles through js.
+		    if (twitterIsFinishedLoading) {
+			// Timeline mounted and ran its javascript, now we can call
+			// timelineDidMount. We can call it directly since we
+			// checked above that it exists.
+			this.props.timelineDidMount(twitterIframeEl);
+		    } else {
+			setTimeout(detectLoaded, 10);
+		    };
+		};
+	        detectLoaded();
+	    },
+	    componentWillUnmount: function() {
+		var twitterScript = document.getElementById("twitter-wjs");
+		var scriptParent = twitterScript.parentNode;
+		scriptParent.removeChild(twitterScript);
+	    },
+	    render: function() {
+		return (
+			React.createElement("div", {className: "twitter-iframe-container"}, 
+			React.createElement("a", {className: "twitter-timeline", href: this.props.username, "data-widget-id": this.props.widgetId}, this.props.tagLine)
+			)
+		);
+	    }
+	});
+	
+	module.exports = Timeline;
+
 
 /***/ }
 /******/ ]);

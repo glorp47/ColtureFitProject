@@ -25,7 +25,7 @@ var routes = (
     <IndexRoute component={Search}/>
     <Route path="/band/new" component={BandForm}/>
     <Route path="/band/:bandId" component={BandShow}/>
-      <Route path="/band/:bandId/album/new" component={AlbumForm}/>
+    <Route path="/album/new" component={AlbumForm}/>
   </Route>
 );
 
