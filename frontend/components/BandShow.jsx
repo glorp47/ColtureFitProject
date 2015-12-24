@@ -102,8 +102,7 @@ var BandShow = React.createClass({
         </ul>
       );
     });
-
-    console.log(this.state.band);
+    console.log(gigs);
     return (
       <div>
         <Link to="/" >Back to Bands Index</Link> <br/>

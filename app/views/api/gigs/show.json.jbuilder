@@ -1,1 +1,1 @@
-json.partial! 'api/gigs/gig', as: :gig
+json.partial! 'api/gigs/gig', gig: @gig

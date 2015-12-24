@@ -32277,8 +32277,7 @@
 	        )
 	      ));
 	    });
-	
-	    console.log(this.state.band);
+	    console.log(gigs);
 	    return React.createElement(
 	      'div',
 	      null,
@@ -39732,6 +39731,7 @@
 	      title: "",
 	      address: "",
 	      date: "31 Dec 2015",
+	      venue_name: "",
 	      link_src: "",
 	      description: ""
 	    };
@@ -39788,6 +39788,13 @@
 	          'Link for info'
 	        ),
 	        React.createElement('input', { type: 'text', valueLink: this.linkState('link_src') }),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          null,
+	          'Venue Name'
+	        ),
+	        React.createElement('input', { type: 'textarea', valueLink: this.linkState('venue_name') }),
 	        React.createElement('br', null),
 	        React.createElement(
 	          'label',

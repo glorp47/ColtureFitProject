@@ -1,4 +1,4 @@
 json.extract!(
 gig,
-:address, :title, :venue_name, :date, :description, :link_src
+:id, :band_id, :address, :title, :venue_name, :date, :description, :link_src
 )

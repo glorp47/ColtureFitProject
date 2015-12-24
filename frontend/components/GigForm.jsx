@@ -13,6 +13,7 @@ getInitialState: function() {
     title: "",
     address: "",
     date: "31 Dec 2015",
+    venue_name: "",
     link_src: "",
     description: ""
   };
@@ -45,6 +46,9 @@ render: function() {
         <br/>
       <label>Link for info</label>
       <input type="text" valueLink={this.linkState('link_src')}/><br/>
+        <label>Venue Name</label>
+          <input type="textarea" valueLink={this.linkState('venue_name')}/>
+            <br/>
         <label>Address</label>
         <input type="text" valueLink={this.linkState('address')}/><br/>
       <input type="submit" value="create gig"/>

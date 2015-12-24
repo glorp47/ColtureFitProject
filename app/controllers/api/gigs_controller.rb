@@ -35,7 +35,7 @@ class Api::GigsController < ApplicationController
 
     def gig_params
       params.require(:gig).permit(:link_src, :title, :date, :description, :venue_name,
-       :address)
+       :address, :band_id)
     end
 
 end
