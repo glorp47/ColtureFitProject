@@ -54,6 +54,8 @@
 	var BandForm = __webpack_require__(247);
 	var BandShow = __webpack_require__(252);
 	var AlbumForm = __webpack_require__(301);
+	var VideoForm = __webpack_require__(303);
+	var GigForm = __webpack_require__(304);
 	var YouTube = __webpack_require__(254);
 	var App = React.createClass({
 	  displayName: 'App',
@@ -82,7 +84,9 @@
 	  React.createElement(IndexRoute, { component: Search }),
 	  React.createElement(Route, { path: '/band/new', component: BandForm }),
 	  React.createElement(Route, { path: '/band/:bandId', component: BandShow }),
-	  React.createElement(Route, { path: '/album/new', component: AlbumForm })
+	  React.createElement(Route, { path: '/album/new', component: AlbumForm }),
+	  React.createElement(Route, { path: '/video/new', component: VideoForm }),
+	  React.createElement(Route, { path: '/gig/new', component: GigForm })
 	);
 	
 	ReactDOM.render(React.createElement(
@@ -31582,6 +31586,14 @@
 	  },
 	  render: function () {
 	    var handleItemClick = this.handleItemClick;
+	    var bands;
+	    if (this.props.bands.length > 0) {
+	      bands = this.props.bands.map(function (band, key) {
+	        return React.createElement(IndexItem, { key: key, band: band,
+	          clicked: handleItemClick.bind(null, band) });
+	      });
+	    }
+	    console.log(bands);
 	    return React.createElement(
 	      'div',
 	      null,
@@ -31593,13 +31605,7 @@
 	      React.createElement(
 	        'ul',
 	        null,
-	        this.props.bands.map(function (band) {
-	          var boundClick = handleItemClick.bind(null, band);
-	          return React.createElement(IndexItem, {
-	            clicked: boundClick,
-	            band: band,
-	            key: band.id });
-	        })
+	        bands
 	      )
 	    );
 	  }
@@ -31653,14 +31659,20 @@
 	  getInitialState: function () {
 	    return {
 	      username: "",
+	      password: "",
 	      short_bio: "",
 	      location_zip: "00000",
-	      genre: "",
+	      genre: "select",
 	      members: "",
-	      discography: "",
-	      long_bio: ""
+	      long_bio: "",
+	      twitter: "",
+	      facebook: ""
 	    };
 	  },
+	  change: function (event) {
+	    this.setState({ genre: event.target.value });
+	  },
+	
 	  handleSubmit: function (event) {
 	    event.preventDefault();
 	    var band = Object.assign({}, this.state);
@@ -31697,9 +31709,30 @@
 	        React.createElement(
 	          'label',
 	          null,
+	          'Password          '
+	        ),
+	        React.createElement('input', { type: 'password', valueLink: this.linkState("password") }),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          null,
 	          'Name '
 	        ),
 	        React.createElement('input', { type: 'text', valueLink: this.linkState('username') }),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          null,
+	          'Twitter '
+	        ),
+	        React.createElement('input', { type: 'text', valueLink: this.linkState('twitter') }),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          null,
+	          'Facebook '
+	        ),
+	        React.createElement('input', { type: 'text', valueLink: this.linkState('facebook') }),
 	        React.createElement('br', null),
 	        React.createElement(
 	          'label',
@@ -31725,10 +31758,23 @@
 	        React.createElement(
 	          'label',
 	          null,
-	          'Genre',
+	          'Members '
+	        ),
+	        React.createElement('input', { type: 'textarea', valueLink: this.linkState('members') }),
+	        ' ',
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          null,
+	          'Select Account Type',
 	          React.createElement(
 	            'select',
-	            { name: 'band[genre]' },
+	            { name: 'band[genre]', onChange: this.change, value: this.state.genre },
+	            React.createElement(
+	              'option',
+	              { value: 'select' },
+	              'Select'
+	            ),
 	            React.createElement(
 	              'option',
 	              { value: 'rap' },
@@ -31801,13 +31847,6 @@
 	            )
 	          )
 	        ),
-	        React.createElement('br', null),
-	        React.createElement(
-	          'label',
-	          null,
-	          'Members '
-	        ),
-	        React.createElement('input', { type: 'textarea', valueLink: this.linkState('members') }),
 	        ' ',
 	        React.createElement('br', null),
 	        React.createElement('input', { type: 'submit', value: 'create band' })
@@ -32100,15 +32139,12 @@
 	    this.setState({ band: band });
 	  },
 	
-	  _onReady: function (event) {
-	    // access to player in all event handlers via event.target
-	    event.target.pauseVideo();
-	  },
-	
 	  render: function () {
 	    var bands = [];
 	    var albums = [];
 	    var videos = [];
+	    var gigs = [];
+	
 	    if (this.state.band.id) {
 	      bands.push(this.state.band);
 	    } else {
@@ -32126,7 +32162,7 @@
 	      'a',
 	      { className: 'twitter-timeline', href: twitterLink,
 	        'data-widget-id': '679881850605572098' },
-	      'Tweets by @',
+	      'Tweets by ',
 	      this.state.band.twitter
 	    );
 	
@@ -32144,21 +32180,24 @@
 	          React.createElement(
 	            'a',
 	            { href: fbLink },
-	            'this.state.band.username'
+	            this.state.band.username
 	          )
 	        )
 	      )
 	    );
 	
 	    this.state.band.videos.forEach(function (video) {
+	      var linkSrc = "https://www.youtube.com/embed/" + video.link_src;
 	
 	      videos.push(React.createElement(
 	        'ul',
-	        { key: "video" + video.id },
+	        { className: 'videos', key: "video" + video.id },
 	        React.createElement(
 	          'li',
 	          null,
-	          React.createElement('div', { dangerouslySetInnerHTML: { __html: video.link_src } })
+	          React.createElement('iframe', { width: '320', height: '180', src: linkSrc,
+	            frameBorder: '0', allowFullScreen: true }),
+	          '  '
 	        ),
 	        React.createElement(
 	          'li',
@@ -32178,7 +32217,7 @@
 	    this.state.band.albums.forEach(function (album) {
 	      albums.push(React.createElement(
 	        'ul',
-	        { key: "album" + album.id },
+	        { className: 'albums', key: "album" + album.id },
 	        React.createElement(
 	          'li',
 	          null,
@@ -32198,7 +32237,48 @@
 	        )
 	      ));
 	    });
-	    console.log(fbEmbed);
+	
+	    this.state.band.gigs.forEach(function (gig) {
+	      gigs.push(React.createElement(
+	        'ul',
+	        { className: 'gigs', key: "gig" + gig.id },
+	        React.createElement(
+	          'li',
+	          null,
+	          'Performance Date: ',
+	          gig.date.slice(0, 10)
+	        ),
+	        React.createElement(
+	          'li',
+	          null,
+	          'Performance Venue: ',
+	          gig.venue_name
+	        ),
+	        React.createElement(
+	          'li',
+	          null,
+	          'Performance Address: ',
+	          gig.address
+	        ),
+	        React.createElement(
+	          'li',
+	          null,
+	          'Performance Description: ',
+	          gig.description
+	        ),
+	        React.createElement(
+	          'li',
+	          null,
+	          React.createElement(
+	            'a',
+	            { href: gig.link_src },
+	            'Link for more Info'
+	          )
+	        )
+	      ));
+	    });
+	
+	    console.log(this.state.band);
 	    return React.createElement(
 	      'div',
 	      null,
@@ -32215,6 +32295,21 @@
 	        'Create new Album for ',
 	        this.state.band.username
 	      ),
+	      React.createElement('br', null),
+	      React.createElement(
+	        Link,
+	        { to: "/video/new?bandId=" + this.state.band.id },
+	        'Create new Video for ',
+	        this.state.band.username
+	      ),
+	      React.createElement('br', null),
+	      React.createElement(
+	        Link,
+	        { to: "/gig/new?bandId=" + this.state.band.id },
+	        'Create new Gig for ',
+	        this.state.band.username
+	      ),
+	      React.createElement('br', null),
 	      React.createElement(
 	        'ul',
 	        null,
@@ -32267,10 +32362,15 @@
 	          'div',
 	          { className: 'video-list' },
 	          videos
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'gig-list' },
+	          gigs
 	        )
 	      ),
-	      fbEmbed,
-	      twitterEmbed
+	      twitterEmbed,
+	      fbEmbed
 	    );
 	  }
 	});
@@ -39420,7 +39520,6 @@
 	        ),
 	        React.createElement('input', { type: 'text', valueLink: this.linkState('date_made') }),
 	        React.createElement('br', null),
-	        React.createElement('br', null),
 	        React.createElement(
 	          'label',
 	          null,
@@ -39520,6 +39619,196 @@
 	
 	module.exports = Timeline;
 
+
+/***/ },
+/* 303 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ApiUtil = __webpack_require__(235);
+	var LinkedStateMixin = __webpack_require__(248);
+	
+	var VideoForm = React.createClass({
+	  displayName: 'VideoForm',
+	
+	  mixins: [LinkedStateMixin],
+	  contextTypes: {
+	    router: React.PropTypes.func
+	  },
+	  getInitialState: function () {
+	    return {
+	      band_id: this.props.location.query.bandId,
+	      title: "",
+	      long_bio: "",
+	      date_made: "31 Dec 2015",
+	      link_src: ""
+	    };
+	  },
+	  handleSubmit: function (event) {
+	    event.preventDefault();
+	    var video = Object.assign({}, this.state);
+	    ApiUtil.createVideo(video);
+	    this.navigateToSearch();
+	  },
+	  navigateToSearch: function () {
+	    this.props.history.pushState(null, "/");
+	  },
+	  handleCancel: function (event) {
+	    event.preventDefault();
+	    this.navigateToSearch();
+	  },
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'h3',
+	        null,
+	        'Create Video'
+	      ),
+	      React.createElement(
+	        'form',
+	        { onSubmit: this.handleSubmit },
+	        React.createElement(
+	          'label',
+	          null,
+	          'Title'
+	        ),
+	        React.createElement('input', { type: 'text', valueLink: this.linkState('title') }),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          null,
+	          'Long Bio'
+	        ),
+	        React.createElement('input', { type: 'textarea', valueLink: this.linkState('long_bio') }),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          null,
+	          'Date made (Day Mon Year)'
+	        ),
+	        React.createElement('input', { type: 'text', valueLink: this.linkState('date_made') }),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          null,
+	          'Video Embed Code'
+	        ),
+	        React.createElement('input', { type: 'text', valueLink: this.linkState('link_src') }),
+	        React.createElement('br', null),
+	        React.createElement('input', { type: 'submit', value: 'create video' })
+	      ),
+	      React.createElement(
+	        'button',
+	        { onClick: this.handleCancel },
+	        'Cancel'
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = VideoForm;
+
+/***/ },
+/* 304 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ApiUtil = __webpack_require__(235);
+	var LinkedStateMixin = __webpack_require__(248);
+	
+	var GigForm = React.createClass({
+	  displayName: 'GigForm',
+	
+	  mixins: [LinkedStateMixin],
+	  contextTypes: {
+	    router: React.PropTypes.func
+	  },
+	  getInitialState: function () {
+	    return {
+	      band_id: this.props.location.query.bandId,
+	      title: "",
+	      address: "",
+	      date: "31 Dec 2015",
+	      link_src: "",
+	      description: ""
+	    };
+	  },
+	  handleSubmit: function (event) {
+	    event.preventDefault();
+	    var gig = Object.assign({}, this.state);
+	    ApiUtil.createGig(gig);
+	    this.navigateToSearch();
+	  },
+	  navigateToSearch: function () {
+	    this.props.history.pushState(null, "/");
+	  },
+	  handleCancel: function (event) {
+	    event.preventDefault();
+	    this.navigateToSearch();
+	  },
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'h3',
+	        null,
+	        'Create Gig'
+	      ),
+	      React.createElement(
+	        'form',
+	        { onSubmit: this.handleSubmit },
+	        React.createElement(
+	          'label',
+	          null,
+	          'Title'
+	        ),
+	        React.createElement('input', { type: 'text', valueLink: this.linkState('title') }),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          null,
+	          'Description'
+	        ),
+	        React.createElement('input', { type: 'textarea', valueLink: this.linkState('description') }),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          null,
+	          'Date made (Day Mon Year)'
+	        ),
+	        React.createElement('input', { type: 'text', valueLink: this.linkState('date') }),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          null,
+	          'Link for info'
+	        ),
+	        React.createElement('input', { type: 'text', valueLink: this.linkState('link_src') }),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          null,
+	          'Address'
+	        ),
+	        React.createElement('input', { type: 'text', valueLink: this.linkState('address') }),
+	        React.createElement('br', null),
+	        React.createElement('input', { type: 'submit', value: 'create gig' })
+	      ),
+	      React.createElement(
+	        'button',
+	        { onClick: this.handleCancel },
+	        'Cancel'
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = GigForm;
 
 /***/ }
 /******/ ]);

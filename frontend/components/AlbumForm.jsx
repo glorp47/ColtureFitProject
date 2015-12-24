@@ -43,7 +43,6 @@ render: function() {
       <label>Date made (Day Mon Year)</label>
         <input type="text" valueLink={this.linkState('date_made')}/>
         <br/>
-    <br/>
       <label>Link to Album</label>
       <input type="text" valueLink={this.linkState('link_src')}/><br/>
         <label>Link to Image</label>

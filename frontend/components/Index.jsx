@@ -7,21 +7,21 @@ var Index = React.createClass({
   },
   render: function(){
     var handleItemClick = this.handleItemClick;
+    var bands;
+    if (this.props.bands.length > 0)
+    {bands = this.props.bands.map(function (band, key) {
+        return (
+            <IndexItem key={key} band={band}
+              clicked={handleItemClick.bind(null, band)}/>
+        );
+      });
+    }
+    console.log(bands);
     return (
       <div>
         <h1>Index</h1>
         <ul>
-          {
-            this.props.bands.map(function(band){
-              var boundClick = handleItemClick.bind(null, band);
-              return (
-                <IndexItem
-                clicked={boundClick}
-                band={band}
-                key={band.id} />
-              );
-            })
-          }
+          {bands}
         </ul>
       </div>
     );

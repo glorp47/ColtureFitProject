@@ -33,7 +33,7 @@ class Api::BandsController < ApplicationController
   private
 
   def band_params
-    params.require(:band).permit(:genre, :members, :password,
+    params.require(:band).permit(:genre, :members, :password, :twitter, :facebook,
     :email, :location_zip, :account_type, :short_bio, :long_bio, :username)
   end
 

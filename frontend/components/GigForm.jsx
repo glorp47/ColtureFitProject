@@ -2,7 +2,7 @@ var React = require('react');
 var ApiUtil = require('../util/ApiUtil');
 var LinkedStateMixin = require('react-addons-linked-state-mixin');
 
-var VideoForm = React.createClass({
+var GigForm = React.createClass({
 mixins: [LinkedStateMixin],
 contextTypes: {
   router: React.PropTypes.func
@@ -11,15 +11,16 @@ getInitialState: function() {
   return {
     band_id: this.props.location.query.bandId,
     title: "",
-    long_bio: "",
-    date_made: "31 Dec 2015",
+    address: "",
+    date: "31 Dec 2015",
     link_src: "",
+    description: ""
   };
 },
 handleSubmit: function(event) {
   event.preventDefault();
-  var video = Object.assign({}, this.state);
-  ApiUtil.createVideo(video);
+  var gig = Object.assign({}, this.state);
+  ApiUtil.createGig(gig);
   this.navigateToSearch();
 },
 navigateToSearch: function() {
@@ -31,20 +32,22 @@ handleCancel: function(event) {
 },
 render: function() {
   return (<div>
-    <h3>Create Video</h3>
+    <h3>Create Gig</h3>
     <form onSubmit={this.handleSubmit}>
       <label>Title</label>
       <input type="text" valueLink={this.linkState('title')}/>
         <br/>
-      <label>Long Bio</label>
-        <input type="textarea" valueLink={this.linkState('long_bio')}/>
+      <label>Description</label>
+        <input type="textarea" valueLink={this.linkState('description')}/>
           <br/>
       <label>Date made (Day Mon Year)</label>
-        <input type="text" valueLink={this.linkState('date_made')}/>
+        <input type="text" valueLink={this.linkState('date')}/>
         <br/>
-      <label>Video Embed Code</label>
+      <label>Link for info</label>
       <input type="text" valueLink={this.linkState('link_src')}/><br/>
-      <input type="submit" value="create video"/>
+        <label>Address</label>
+        <input type="text" valueLink={this.linkState('address')}/><br/>
+      <input type="submit" value="create gig"/>
     </form>
     <button onClick={this.handleCancel}>Cancel</button>
   </div>);
@@ -53,4 +56,4 @@ render: function() {
 
 });
 
-module.exports = VideoForm;
+module.exports = GigForm;

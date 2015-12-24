@@ -8,6 +8,8 @@ var Search = require('./components/Search');
 var BandForm = require('./components/BandForm');
 var BandShow = require('./components/BandShow');
 var AlbumForm = require('./components/AlbumForm');
+var VideoForm = require('./components/VideoForm');
+var GigForm = require('./components/GigForm');
 var YouTube = require('react-youtube');
 var App = React.createClass({
   render: function(){
@@ -26,6 +28,8 @@ var routes = (
     <Route path="/band/new" component={BandForm}/>
     <Route path="/band/:bandId" component={BandShow}/>
     <Route path="/album/new" component={AlbumForm}/>
+    <Route path="/video/new" component={VideoForm}/>
+    <Route path="/gig/new" component={GigForm}/>
   </Route>
 );
 

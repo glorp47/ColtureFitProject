@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151223222434) do
+ActiveRecord::Schema.define(version: 20151224233200) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -83,22 +83,19 @@ ActiveRecord::Schema.define(version: 20151223222434) do
   add_index "fans", ["username"], name: "index_fans_on_username", using: :btree
 
   create_table "gigs", force: :cascade do |t|
-    t.decimal  "geo_lat",      null: false
-    t.decimal  "geo_lng",      null: false
-    t.integer  "location_zip", null: false
-    t.string   "address",      null: false
-    t.string   "title",        null: false
-    t.string   "venue_name",   null: false
-    t.datetime "date",         null: false
-    t.text     "description",  null: false
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
-    t.integer  "band_id",      null: false
+    t.string   "address",     null: false
+    t.string   "title",       null: false
+    t.string   "venue_name",  null: false
+    t.datetime "date",        null: false
+    t.text     "description", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.integer  "band_id",     null: false
+    t.string   "link_src"
   end
 
   add_index "gigs", ["band_id"], name: "index_gigs_on_band_id", using: :btree
   add_index "gigs", ["date"], name: "index_gigs_on_date", using: :btree
-  add_index "gigs", ["location_zip"], name: "index_gigs_on_location_zip", using: :btree
   add_index "gigs", ["title"], name: "index_gigs_on_title", using: :btree
 
   create_table "images", force: :cascade do |t|

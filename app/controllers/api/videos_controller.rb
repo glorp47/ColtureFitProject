@@ -33,7 +33,7 @@ class Api::VideosController < ApplicationController
    private
 
    def video_params
-     params.require(:video).permit(:fan_id, :album_id, :title, :long_bio, :date_made)
+     params.require(:video).permit(:band_id, :link_src, :title, :long_bio, :date_made)
    end
 
 
